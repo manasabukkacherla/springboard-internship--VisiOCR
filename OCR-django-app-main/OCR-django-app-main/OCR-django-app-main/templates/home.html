@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OCR Tool</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="http://fonts.cdnfonts.com/css/euclid-circular-a?styles=100037,100034,100036,100039,100031" rel="stylesheet">
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
+    <script src="/static/error.js"></script>
+</head>
+
+<body class="bg-slate-50" style="font-family: 'Euclid Circular A', sans-serif;">
+    <!-- error popup modal -->
+    {% if messages %}
+    <div id="error-popup" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            {% for msg in messages %}
+            <p>{{ msg }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <!-- error popup modal -->
+
+    <section class="text-gray-600">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="container">
+                <div class="buttons">
+                    <button id="upload-btn" onclick="document.getElementById('formFile').click()" class="custom-btn shadow-md mb-2">Upload Img <i class="fi fi-rr-upload"></i></button>
+                    <form method="post" enctype="multipart/form-data" class="flex justify-center">
+                        {% csrf_token %}
+                        <input name="imagefile" re accept="image/*" type="file" id="formFile" style="display: none;">
+                        <input type="tel" name="phone" placeholder="Phone Number" class="custom-btn shadow-md bg-white">
+                        
+                        <select name="language" class="custom-btn shadow-md bg-white">
+                            <option value="eng" selected>English</option>
+                            <option value="hin">Hindi</option>
+                        </select>
+                        <button type="submit" class="custom-btn shadow-md bg-white">Scan <i class="fi fi-rr-search"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Uploaded image will be shown -->
+            {% if image %}
+            <div class="flex justify-center ease-out m-5 rounded-2xl duration-300 h-96">
+                <img class="justify-center rounded-2xl hover:scale-105 stroke-white stroke-2 duration-500" src="data:image/png;base64, {{ image }}">
+            </div>
+            {% endif %}
+            <!-- Uploaded image will be shown -->
+
+            <!-- OCR text will be shown -->
+            {% if ocr %}
+            <div class="ease-out bg-white text-slate-800 rounded-2xl hover:shadow-lg p-6 mt-3 duration-300 w-auto">
+                <p id="ocrtext" class="text-lg mt-2 mb-8 text-center">{{ ocr }}</p>
+                <button id="copybtn" onclick="copy()" class="button">Copy Text <i class="fi fi-rr-duplicate"></i></button>
+            </div>
+            {% endif %}
+            <!-- OCR text will be shown -->
+        </div>
+    </section>
+</body>
+</html>
